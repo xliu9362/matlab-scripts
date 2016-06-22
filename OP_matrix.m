@@ -1,4 +1,4 @@
-N=5;
+N=129;
 X=(0:1/(N-1):1);
 Y=(0:1/(N-1):1);
 Xc=X-X((N+1)/2);
@@ -27,13 +27,15 @@ end
 figure;
 contourf(X,Y,Ap,'showtext','on');
 colormap('jet');
-ym=meshgrid(1:-1/(N-1):0)';
-xm=meshgrid(0:1/(N-1):1);
-syms x y f;
-for i=1:N
-for j=1:N
-f(i,j)=(y-ym(i,j))-(tan(deg2rad(A(i,j))))*(x-xm(i,j));
-end
-end
 
+Ax=sqrt(0.5*(1-cos(deg2rad(A))));
+Bx=sqrt(0.5*(1+cos(deg2rad(A))));
+fft_Ax=fft2(Ax);
+fft_Bx=fft2(Bx);
+mag_Ax=abs(fft_Ax);
+mag_Bx=abs(fft_Bx);
+figure, 
+imshow(abs((fft_Ax))), colormap gray
+figure, 
+imshow(abs((fft_Bx))), colormap gray
 
