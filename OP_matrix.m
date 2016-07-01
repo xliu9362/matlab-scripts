@@ -1,4 +1,4 @@
-N=129;
+N=129; %number of points
 %{
 pinwheel location
 --------------------------
@@ -84,14 +84,13 @@ A=horzcat(A_left,A_right);
 %==========================================================================
 %Plot the unit cell
 %==========================================================================
-s=size(A_plot);
-Ap=zeros(s);
+total_size=size(A);
+Ap=zeros(total_size);
 m=1;
-for k=s(1):-1:1
+for k=total_size(1):-1:1
 Ap(m,:)=0.5*A(k,:);
 m=m+1;
 end
-
 X_lt=(-1:(1/(N-1)):0);
 s_lt=size(X_lt);
 s_rt=size(X_rt);
@@ -104,17 +103,59 @@ Y_plot=[Y_lb(1:s_lb(2)-1) Y_rt];
 contourf(X_plot,Y_plot,Ap,'showtext','on');
 colormap('jet');
 
-
-
-%
+NFFT = 2^nextpow2(s(1));
+%==========================================================================
+% partial direvative d/dx detects the vertical bar, 
+% d/dy detects the horizontal bar.
+% Op angle can also be dexcribed as : Phi(x,y)= a(x,y)d/dx +b(x,y)d/dy
+% 1) find the matrix of A(x.y) and B(x,y)  
+% 2) perform 2D Discrete fourier transform on Ax and Bx
+% 3) truncate Ax, Bx with first few terms that has large magnitude
+% 4) perform idft on truncated Ax,Bx
+%==========================================================================
+%find Ax,Bx from orientation angle theta.
 Ax=sqrt(0.5*(1-cos(deg2rad(A))));
 Bx=sqrt(0.5*(1+cos(deg2rad(A))));
-fft_Ax=fft2(Ax);
-fft_Bx=fft2(Bx);
-mag_Ax =abs(fftshift(fft_Ax));
-mag_Bx=abs(fftshift(fft_Bx));
-figure, colormap gray, 
-imshow(mag_Ax), 
-figure, colormap gray,
-imshow(mag_Bx)
-
+%2d dft on Ax, Bx
+dft_Ax=mydft(Ax);
+dft_Bx=mydft(Bx);
+%plot the magnitude of fft_Ax, and fft_Bx 
+mag_Ax =abs(fftshift(dft_Ax));
+mag_Bx=abs(fftshift(dft_Bx));
+figure, 
+imagesc(Fx,Fy,mag_Ax), 
+figure,
+imagesc(Fx,Fy,mag_Bx)
+%truncate Ax, Bx with the first few terms
+size_dft=size(dft_Ax);
+filter=zeros(size_dft);
+f_row_sp=((size_dft(1)+1)/2)-4;
+f_row_ep=((size_dft(1)+1)/2)+4;
+f_col_sp=((size_dft(2)+1)/2)-5;
+f_col_ep=((size_dft(2)+1)/2)+5;
+filter(f_row_sp:f_row_ep,f_col_sp:f_col_ep)=ones(9,11);
+filter_Ax=(fftshift(dft_Ax)).*filter;
+filter_Bx=(fftshift(dft_Bx)).*filter;
+figure
+imagesc(Fx,Fy,abs(filter_Ax));
+%idft transform back to spacial domain
+filter_Ax=ifft2(ifftshift(filter_Ax));
+filter_Bx=ifft2(ifftshift(filter_Bx));
+filter_angle=rad2deg(acos(real(filter_Bx)));
+% acos range from 0-pi, 
+% so need to add pi to the bottom half of each pinwheel
+start_p=(total_size(1)+3)/4;
+end_p=(total_size(1)+1)-start_p;
+filter_angle_pi=filter_angle;
+filter_angle_pi(start_p:end_p,:)=180-filter_angle(start_p:end_p,:);
+% plot the Op angle after filtering
+s=size(filter_angle_pi);
+fa_plot=zeros(s);
+m=1;
+for k=s(1):-1:1
+fa_plot(m,:)=filter_angle_pi(k,:);
+m=m+1;
+end
+figure;
+contourf(X_plot,Y_plot,real(fa_plot),'showtext','on');
+colormap('jet');
