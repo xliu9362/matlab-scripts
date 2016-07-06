@@ -4,11 +4,11 @@ pinwheel location
 --------------------------
           y axis
             ^
-     -      |      +
+ --  -   |  |  |   +   --
             |
 ------------|-------------> x axix
             |
-     +      |      -      
+ --  +   |  |  |   -   --   
 
 ---------------------------
 '-' sign stands for clockwise rotation
@@ -77,18 +77,18 @@ A_rb=A_rb(2:size_rb(1),1:size_rb(2));
 %By concatenating the left-top,right-top,left-bottom, right-bottom pinwheel
 %matrix
 %==========================================================================
-A_left=vertcat(A_lt,A_lb);
-A_right=vertcat(A_rt,A_rb);
-A=horzcat(A_left,A_right);
+theta_left=vertcat(A_lt,A_lb);
+theta_right=vertcat(A_rt,A_rb);
+theta=horzcat(theta_left,theta_right);
 
 %==========================================================================
 %Plot the unit cell
 %==========================================================================
-total_size=size(A);
-Ap=zeros(total_size);
+total_size=size(theta);
+phi=zeros(total_size);
 m=1;
 for k=total_size(1):-1:1
-Ap(m,:)=0.5*A(k,:);
+phi(m,:)=0.5*theta(k,:);
 m=m+1;
 end
 X_lt=(-1:(1/(N-1)):0);
@@ -100,7 +100,7 @@ s_lb=size(X_lt);
 figure;
 X_plot=[X_lt(1:s_lt(2)-1) X_rt];
 Y_plot=[Y_lb(1:s_lb(2)-1) Y_rt];
-contourf(X_plot,Y_plot,Ap,'showtext','on');
+contourf(X_plot,Y_plot,phi,'showtext','on');
 colormap('jet');
 
 NFFT = 2^nextpow2(s(1));
@@ -114,8 +114,8 @@ NFFT = 2^nextpow2(s(1));
 % 4) perform idft on truncated Ax,Bx
 %==========================================================================
 %find Ax,Bx from orientation angle theta.
-Ax=sqrt(0.5*(1-cos(deg2rad(A))));
-Bx=sqrt(0.5*(1+cos(deg2rad(A))));
+Ax=sqrt(0.5*(1-cos(deg2rad(theta))));
+Bx=sqrt(0.5*(1+cos(deg2rad(theta))));
 %2d dft on Ax, Bx
 dft_Ax=mydft(Ax);
 dft_Bx=mydft(Bx);
@@ -136,14 +136,14 @@ f_col_ep=((size_dft(2)+1)/2)+5;
 filter(f_row_sp:f_row_ep,f_col_sp:f_col_ep)=ones(9,11);
 filter_Ax=(fftshift(dft_Ax)).*filter;
 filter_Bx=(fftshift(dft_Bx)).*filter;
-figure
-imagesc(Fx,Fy,abs(filter_Ax));
+%figure
+%imagesc(Fx,Fy,abs(filter_Ax));
 %idft transform back to spacial domain
 filter_Ax=ifft2(ifftshift(filter_Ax));
 filter_Bx=ifft2(ifftshift(filter_Bx));
-filter_angle=rad2deg(acos(real(filter_Bx)));
-% acos range from 0-pi, 
-% so need to add pi to the bottom half of each pinwheel
+%filter_angle=rad2deg(acos(real(filter_Bx)));
+filter_angle=atan2d(real(filter_Ax),real(filter_Bx)); 
+% need to add pi to the bottom half of each pinwheel
 start_p=(total_size(1)+3)/4;
 end_p=(total_size(1)+1)-start_p;
 filter_angle_pi=filter_angle;
