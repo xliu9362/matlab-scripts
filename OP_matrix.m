@@ -119,15 +119,45 @@ Bx=sqrt(0.5*(1+cos(deg2rad(theta))));
 %2d dft on Ax, Bx
 dft_Ax=mydft(Ax);
 dft_Bx=mydft(Bx);
-%plot the magnitude of fft_Ax, and fft_Bx 
-mag_Ax =abs(fftshift(dft_Ax));
-mag_Bx=abs(fftshift(dft_Bx));
-figure, 
-imagesc(Fx,Fy,mag_Ax), 
-figure,
-imagesc(Fx,Fy,mag_Bx)
-%truncate Ax, Bx with the first few terms
+%magnitude of dft_Ax,dft_Bx
+mag_Ax =abs(dft_Ax);
+mag_Bx=abs(dft_Bx);
+%plot the magnitude of dft_Ax, and dft_Bx 
 size_dft=size(dft_Ax);
+Fx=((1-(size_dft(1)+1)/2):1:(size_dft(1)-((size_dft(1)+1)/2)));
+Fy=(size_dft(1)-((size_dft(1)+1)/2)):-1:((1-(size_dft(1)+1)/2));
+figure, 
+imagesc(Fx,Fy,fftshift(mag_Ax)); 
+title('Magnitude of DFT of a(x,y)'); 
+
+figure,
+imagesc(Fx,Fy,fftshift(mag_Bx));
+title('Magnitude of DFT of b(x,y)'); 
+%magnitude of Kx
+Kx=mag_Ax(1,1:10);
+figure,
+stem((0:9),Kx);
+hold on;
+stem((0:9),mag_Ax(2,1:10));
+stem((0:9),mag_Ax(3,1:10));
+stem((0:9),mag_Ax(4,1:10));
+stem((0:9),mag_Ax(5,1:10));
+hold off;
+title('Magnitude of (Kx,Ky=0,1,2,3,4)')
+legend('Kx,Ky=0','Kx,Ky=1','Kx,Ky=2','Kx,Ky=3','Kx,Ky=4');
+%magnitude of Ky
+Ky=mag_Ax(1:10,1);
+figure,
+stem((0:9),Ky);
+hold on;
+stem((0:9),mag_Ax(1:10,2));
+stem((0:9),mag_Ax(1:10,3));
+stem((0:9),mag_Ax(1:10,4));
+stem((0:9),mag_Ax(1:10,5));
+hold off;
+title('Magnitude of (Kx=0,1,2,3,4,Ky)')
+legend('Kx=0,Ky','Kx=1,Ky','Kx=2,Ky','Kx=3,Ky','Kx=4,Ky');
+%truncate Ax, Bx with the first few terms
 filter=zeros(size_dft);
 f_row_sp=((size_dft(1)+1)/2)-4;
 f_row_ep=((size_dft(1)+1)/2)+4;
@@ -141,7 +171,6 @@ filter_Bx=(fftshift(dft_Bx)).*filter;
 %idft transform back to spacial domain
 filter_Ax=ifft2(ifftshift(filter_Ax));
 filter_Bx=ifft2(ifftshift(filter_Bx));
-%filter_angle=rad2deg(acos(real(filter_Bx)));
 filter_angle=atan2d(real(filter_Ax),real(filter_Bx)); 
 % need to add pi to the bottom half of each pinwheel
 start_p=(total_size(1)+3)/4;
@@ -159,3 +188,4 @@ end
 figure;
 contourf(X_plot,Y_plot,real(fa_plot),'showtext','on');
 colormap('jet');
+title('Reconstructed OP angle Plot');
