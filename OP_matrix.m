@@ -103,7 +103,7 @@ Y_plot=[Y_lb(1:s_lb(2)-1) Y_rt];
 contourf(X_plot,Y_plot,phi,'showtext','on');
 colormap('jet');
 
-NFFT = 2^nextpow2(s(1));
+%NFFT = 2^nextpow2(s(1));
 %==========================================================================
 % partial direvative d/dx detects the vertical bar, 
 % d/dy detects the horizontal bar.
