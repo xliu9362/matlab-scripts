@@ -263,9 +263,24 @@ Y_pc = linspace(-1,1,size(PMM,1));
 
 
 %%
-
+cmap = cyclic_mygbm_30_95_c78_n256_s25;
 figure(6)
 imagesc(X_pc, Y_pc, PMM); hold on;
+axis equal
+xlim([-1.0, 1.0])
+ylim([-1.0, 1.0])
+plot([-1.0, 1.0], [0, 0], 'k')
+plot([0.0, 0.0], [-1.0, 1.0], 'k')
+plot([-1.0, 1.0], [1.0, -1.0], 'k--')
+plot([-1.0, 1.0], [-1.0, 1.0], 'k--')
+ylabel('y [mm]')
+xlabel('x [mm]')
+set(gca, 'YDir', 'normal')
+colormap(cmap)
+colorbar()
+%%
+figure(7)
+imagesc(X_pc, Y_pc, cosd(PMM)); hold on;
 colormap('hsv')
 axis equal
 xlim([-1.0, 1.0])
@@ -277,6 +292,55 @@ plot([-1.0, 1.0], [-1.0, 1.0], 'k--')
 ylabel('y [mm]')
 xlabel('x [mm]')
 set(gca, 'YDir', 'normal')
+colorbar()
+%%
+figure(8)
+imagesc(X_pc, Y_pc, sind(PMM)); hold on;
+colormap('hsv')
+axis equal
+xlim([-1.0, 1.0])
+ylim([-1.0, 1.0])
+plot([-1.0, 1.0], [0, 0], 'k')
+plot([0.0, 0.0], [-1.0, 1.0], 'k')
+plot([-1.0, 1.0], [1.0, -1.0], 'k--')
+plot([-1.0, 1.0], [-1.0, 1.0], 'k--')
+ylabel('y [mm]')
+xlabel('x [mm]')
+set(gca, 'YDir', 'normal')
+colorbar()
+
+%%
+
+cmap = cyclic_mygbm_30_95_c78_n256_s25;
+figure(8)
+imagesc(X_pc, Y_pc, PMM'); hold on;
+axis equal
+xlim([-1.0, 1.0])
+ylim([-1.0, 1.0])
+plot([-1.0, 1.0], [0, 0], 'k')
+plot([0.0, 0.0], [-1.0, 1.0], 'k')
+plot([-1.0, 1.0], [1.0, -1.0], 'k--')
+plot([-1.0, 1.0], [-1.0, 1.0], 'k--')
+ylabel('y [mm]')
+xlabel('x [mm]')
+set(gca, 'YDir', 'normal')
+colormap(cmap)
+colorbar()
+
+figure(9)
+imagesc(X_pc, Y_pc, PMM'); hold on;
+colormap('hsv')
+axis equal
+xlim([-1.0, 1.0])
+ylim([-1.0, 1.0])
+plot([-1.0, 1.0], [0, 0], 'k')
+plot([0.0, 0.0], [-1.0, 1.0], 'k')
+plot([-1.0, 1.0], [1.0, -1.0], 'k--')
+plot([-1.0, 1.0], [-1.0, 1.0], 'k--')
+ylabel('y [mm]')
+xlabel('x [mm]')
+set(gca, 'YDir', 'normal')
+colormap(flipud(cmap))
 colorbar()
 
 %%
