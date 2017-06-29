@@ -1,4 +1,4 @@
-N=129; %number of points
+N=254; %number of points
 %{
 pinwheel location
 --------------------------
@@ -27,8 +27,8 @@ y_pw = 0.5; % mm
 
 
 % Shift coordinates
-Xc = X_rt - x_pw;
-Yc = Y_rt - y_pw;
+Xc = abs(X_rt) - x_pw;
+Yc = abs(Y_rt) - y_pw;
 
 %%
 
@@ -37,7 +37,7 @@ Yc = Y_rt - y_pw;
 
 % theta
 A        = atan2d(Y, X);
-
+%%
 xy_idx = ceil(N/2);
 A_rt(xy_idx, xy_idx) = -inf;
 
