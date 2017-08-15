@@ -1,9 +1,11 @@
+
+a = 1e-3; %m
 gamma_em=500;
 alpha_em=80;
 beta_em=800;
 alpha_=alpha_em/gamma_em;
 beta_=beta_em/gamma_em;
-K=6000;
+K=(2*pi) / a;
 r_ei=0.2e-3;
 G_ei=-15;
 G_ei_hat=G_ei/((K^2*r_ei^2)+1);
