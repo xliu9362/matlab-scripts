@@ -8,7 +8,6 @@ m2_s=[2.7e-3 1.5e-3];%m measurement point #2
 s2_s=[2.7e-3 3.5e-3];%m source piont #2
 s1_s=[1.2e-3 3.5e-3];%m  source point #1
 CF1=temporal_correlation_fn(s1_s,s2_s,m1_s,m2_s);
-
 %=============================================
 % OP=0, 
 % s1&S2 inline
@@ -28,9 +27,9 @@ CF2=temporal_correlation_fn(s1_0,s2_0,m1_0,m2_0);
 %===============================================
 % theta=45,(m1-s1)=(m2-s2)~2mm;
 m1_45=[4.4e-3 3.9e-3];%m measurement point #1
-m2_45=[3.4e-3 3.9e-3];%m measurement point #2
-s2_45=[0.5e-3 2.1e-3];%m source piont #2
-s1_45=[-0.5e-3 2.1e-3];%m  source point #1
+m2_45=[2.6e-3 3.9e-3];%m measurement point #2
+s2_45=[2.5e-3 2.1e-3];%m source piont #2
+s1_45=[1.5e-3 2.1e-3];%m  source point #1
 CF3=temporal_correlation_fn(s1_45,s2_45,m1_45,m2_45);
 %=============================================
 % OP_s1=90, OP_s2=0; 
@@ -59,15 +58,12 @@ CF2_plot=[CF2((length(CF2)-249):length(CF2)),CF2(1:251)];
 CF3_plot=[CF3((length(CF3)-249):length(CF3)),CF3(1:251)];
 CF4_plot=[CF4((length(CF4)-249):length(CF4)),CF4(1:251)];
 plot(t,(CF1_plot)); hold on;
-%plot(t,(CF2_plot)); 
-%plot(t,(CF3_plot));
-%plot(t,(CF4_plot));
 title('Time domain Correlation Function C(\bf m1,\bf m2,\tau), OP= 90, S1&S2 are located in parallel');
 axis square;
 grid on;
 xlabel('t(ms)');
 ylabel('C(\bf m1,\bf m2,\tau)'); 
-legend('OP=90,distance between m1&s1, m2&s2: ~2mm','distance between m1&s1~2mm, m2&s2~4mm');
+legend('OP=90,distance between m1&s1, m2&s2: ~2mm');
 hold off;
 
 figure;
@@ -80,7 +76,7 @@ ylabel('C(\bf m1,\bf m2,\tau)');
 legend('OP=0,distance between m1&s1,m2$s2: ~2mm');
 
 figure;
-plot(t,(CF6_plot));
+plot(t,(CF3_plot));
 title('Time domain Correlation Function C(\bf m1,\bf m2,\tau),OP=45, S1 & S2 located in parallel');
 axis square;
 grid on;
@@ -202,10 +198,9 @@ a=2e-3; %m;
 K_lowest=(2*pi)/a; %m^-1 
 % various K terms . 
 %k=[0 0;K_lowest 0; 0 K_lowest;];
-%k=[0 0;K_lowest 0; 0 K_lowest;0 2*K_lowest;K_lowest K_lowest;K_lowest 2*K_lowest;K_lowest 3*K_lowest;];
+%k=[0 0;K_lowest 0; 2*K_lowest 0; 3*K_lowest 0;0 K_lowest;0 2*K_lowest;K_lowest K_lowest;K_lowest 2*K_lowest;K_lowest 3*K_lowest;];
 %k=[0 0;K_lowest 0; 0 K_lowest;K_lowest K_lowest;K_lowest 2*K_lowest;];
 k=[0 0;K_lowest 0; 2*K_lowest 0; 3*K_lowest 0;0 K_lowest;0 2*K_lowest;0 3*K_lowest; 0 4*K_lowest;K_lowest K_lowest;2*K_lowest K_lowest;3*K_lowest K_lowest;K_lowest 2*K_lowest;2*K_lowest 2*K_lowest;3*K_lowest 2*K_lowest;K_lowest 3*K_lowest;2*K_lowest 3*K_lowest;3*K_lowest 3*K_lowest;K_lowest 4*K_lowest; 2*K_lowest 4*K_lowest;3*K_lowest 4*K_lowest;K_lowest 5*K_lowest; 2*K_lowest 5*K_lowest;3*K_lowest 5*K_lowest;];
-%k=[0,0;K_lowest 0;2*K_lowest 0;3*K_lowest 0; 0 K_lowest;0 2*K_lowest;0 3*K_lowest;K_lowest K_lowest;2*K_lowest K_lowest;K_lowest 2*K_lowest;2*K_lowest 2*K_lowest;K_lowest 3*K_lowest;2*K_lowest 3*K_lowest;];
 r=m1;
 r_=m2;
 r2=s2;
